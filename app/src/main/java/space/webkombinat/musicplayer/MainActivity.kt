@@ -91,9 +91,9 @@ class MainActivity : ComponentActivity() {
                             items = rootDir,
                         ){ file ->
 //                          CD or RECORD name ディレクトリ名がジャケット名
-                            if (file.isDirectory){
-                                Text(text = file.name)
-                            }
+//                            if (file.isDirectory){
+//                                Text(text = file.name)
+//                            }
 
                             val musics = file.listFiles()
                                 ?.filter( { it.name.endsWith(".mp3") })
