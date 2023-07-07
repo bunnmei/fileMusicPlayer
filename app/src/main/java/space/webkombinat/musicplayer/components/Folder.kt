@@ -3,8 +3,9 @@ package space.webkombinat.musicplayer.components
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun Folder(img:List<String>?, musics: List<String>?, modifier: Modifier = Modifier) {
+fun Folder(img:List<String>?, musics: List<String>?, modifier: Modifier = Modifier, onClick:(String) -> Unit) {
     if (musics != null) {
         val bitmap: Bitmap? =
         if (img != null){
@@ -44,22 +44,28 @@ fun Folder(img:List<String>?, musics: List<String>?, modifier: Modifier = Modifi
         val MMR = MediaMetadataRetriever()
         musics.forEach {
             MMR.setDataSource(it)
-            FolderPanel(MMR = MMR, bitmap = bitmap)
+            FolderPanel(MMR = MMR, bitmap = bitmap){
+                onClick(it)
+            }
         }
         
     }
 }
 
 @Composable
-fun FolderPanel(MMR: MediaMetadataRetriever, bitmap: Bitmap?, modifier: Modifier = Modifier) {
-    
+fun FolderPanel(MMR: MediaMetadataRetriever, bitmap: Bitmap?, modifier: Modifier = Modifier, onClick:() -> Unit) {
     Row(
         modifier = modifier
             .height(80.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                       onClick()
+                       Log.i("MSG", "clickMSG")
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // thumbnail
+
         Box(
             modifier = modifier
                 .height(80.dp)
@@ -74,7 +80,9 @@ fun FolderPanel(MMR: MediaMetadataRetriever, bitmap: Bitmap?, modifier: Modifier
         }
         // description text
         Column(
-            modifier = modifier.weight(1f).padding(start = 10.dp)
+            modifier = modifier
+                .weight(1f)
+                .padding(start = 10.dp)
         ) {
             Text(
                 text = MMR.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: "?",
@@ -88,10 +96,14 @@ fun FolderPanel(MMR: MediaMetadataRetriever, bitmap: Bitmap?, modifier: Modifier
                 maxLines = 1
             )
         }
+
         Box(
             modifier = modifier
                 .height(80.dp)
-                .width(50.dp),
+                .width(50.dp)
+                .clickable {
+                    Log.i("MSG", "click-reader")
+                },
             contentAlignment = Alignment.Center
         ){
             Icon(imageVector = Icons.Default.MoreVert, contentDescription = "tenntenn")

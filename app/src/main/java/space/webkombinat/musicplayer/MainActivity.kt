@@ -95,17 +95,20 @@ class MainActivity : ComponentActivity() {
 //                                Text(text = file.name)
 //                            }
 
+//                          mp3を拾い上げる
                             val musics = file.listFiles()
                                 ?.filter( { it.name.endsWith(".mp3") })
                                 ?.map({it.path})
+
+//                          フォルダ内に画像があればジャケット画像に使う
                             val img = file.listFiles()
                                 ?.filter( { it.name.endsWith(".jpeg") })
                                 ?.map({it.path})
                             if (musics != null){
-                                Folder(img = img, musics = musics)
+                                Folder(img = img, musics = musics){ path ->
+
+                                }
                             }
-
-
                         }
                     }
                 }
