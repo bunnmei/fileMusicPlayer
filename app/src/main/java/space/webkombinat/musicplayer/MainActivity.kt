@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,8 +21,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import space.webkombinat.musicplayer.components.Folder
 import space.webkombinat.musicplayer.ui.theme.MusicPlayerTheme
 import java.io.File
 
@@ -92,17 +90,22 @@ class MainActivity : ComponentActivity() {
                         items(
                             items = rootDir,
                         ){ file ->
-                            Text(text = file.name)
+//                          CD or RECORD name ディレクトリ名がジャケット名
+                            if (file.isDirectory){
+                                Text(text = file.name)
+                            }
 
                             val musics = file.listFiles()
+                                ?.filter( { it.name.endsWith(".mp3") })
+                                ?.map({it.path})
+                            val img = file.listFiles()
+                                ?.filter( { it.name.endsWith(".jpeg") })
+                                ?.map({it.path})
                             if (musics != null){
-                                musics.forEach {
-                                    Text(text = it.name)
-                                }
+                                Folder(img = img, musics = musics)
                             }
-//                            for (music in musics){
-//                                Text(text = music.name)
-//                            }
+
+
                         }
                     }
                 }
