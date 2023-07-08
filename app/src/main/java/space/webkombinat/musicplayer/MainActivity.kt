@@ -14,20 +14,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import space.webkombinat.musicplayer.components.BottomSheet
 import space.webkombinat.musicplayer.components.Folder
 import space.webkombinat.musicplayer.ui.theme.MusicPlayerTheme
 import java.io.File
 
 // Permissionは↓を参考
 // https://github.com/philipplackner/PermissionsGuideCompose/blob/master/app/src/main/java/com/plcoding/permissionsguidecompose/MainActivity.kt
+
+
 class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -38,6 +49,7 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.READ_EXTERNAL_STORAGE,
     )
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +64,6 @@ class MainActivity : ComponentActivity() {
                 visiblePermissionDialogQueue.add(permission)
             }
         }
-
         setContent {
             MusicPlayerTheme {
                 val vm = viewModel<MainVM>()
@@ -73,6 +84,13 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit){
                     multiplePermissionResultLauncher.launch(permissionsToRequest)
                 }
+
+                var openBottomSheet = rememberSaveable { mutableStateOf(false) }
+//                val scope = rememberCoroutineScope()
+//                version番号あげないとrememberModalBottomSheetStateは使えない
+                val bottomSheetState = rememberModalBottomSheetState(
+                    skipPartiallyExpanded = true
+                )
 
                 val path = Environment.getExternalStorageDirectory().path
                 //特定のフォルダのみを表示する。なければ作るように指示
@@ -106,11 +124,13 @@ class MainActivity : ComponentActivity() {
                                 ?.map({it.path})
                             if (musics != null){
                                 Folder(img = img, musics = musics){ path ->
-
+                                    openBottomSheet.value = true
                                 }
                             }
                         }
                     }
+
+                    BottomSheet(openBottomSheet = openBottomSheet, bottomSheetState = bottomSheetState)
                 }
             }
         }
