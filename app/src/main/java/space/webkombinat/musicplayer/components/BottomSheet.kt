@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import space.webkombinat.musicplayer.MainVM
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.sp
 fun BottomSheet(
     openBottomSheet: MutableState<Boolean>,
     bottomSheetState: SheetState,
+    vm: MainVM,
     modifier: Modifier = Modifier,
 ) {
     if(openBottomSheet.value){
@@ -139,7 +141,7 @@ fun BottomSheet(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Pause,
-                                    contentDescription = "prev-music",
+                                    contentDescription = "play-stop-music",
                                     modifier = modifier
                                         .width(50.dp)
                                         .height(70.dp)
@@ -156,7 +158,7 @@ fun BottomSheet(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.SkipNext,
-                                    contentDescription = "prev-music",
+                                    contentDescription = "next-music",
                                     modifier = modifier
                                         .width(50.dp)
                                         .height(70.dp)

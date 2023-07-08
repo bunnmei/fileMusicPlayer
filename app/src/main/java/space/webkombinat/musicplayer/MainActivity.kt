@@ -124,13 +124,14 @@ class MainActivity : ComponentActivity() {
                                 ?.map({it.path})
                             if (musics != null){
                                 Folder(img = img, musics = musics){ path ->
+                                    vm.setPath(path)
                                     openBottomSheet.value = true
                                 }
                             }
                         }
                     }
 
-                    BottomSheet(openBottomSheet = openBottomSheet, bottomSheetState = bottomSheetState)
+                    BottomSheet(openBottomSheet = openBottomSheet, bottomSheetState = bottomSheetState, vm = vm)
                 }
             }
         }
