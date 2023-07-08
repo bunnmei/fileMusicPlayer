@@ -1,6 +1,7 @@
 package space.webkombinat.musicplayer.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +50,8 @@ fun BottomSheet(
     vm: MainVM,
     modifier: Modifier = Modifier,
 ) {
+    val playOrStop = vm.musicState.value
+    val mp = vm.mp
     if(openBottomSheet.value){
         BoxWithConstraints {
             val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
@@ -102,14 +106,14 @@ fun BottomSheet(
                         Spacer(modifier = modifier.height(20.dp))
                         Slider(
                             modifier = modifier,
-                            value = 5.toFloat(),
+                            value = mp.value?.currentPosition?.toFloat() ?: 0f,
                             onValueChange = { sliderValue_ ->
     //                            viewModel.setFontNow(sliderValue_.toInt())
                             },
                             onValueChangeFinished = {
     //                            viewModel.setFontSize()
                             },
-                            valueRange = 14f..32f
+                            valueRange = if (mp.value != null) {0f..mp.value!!.duration.toFloat()} else {0f..100f}
                         )
                         Spacer(modifier = modifier.height(20.dp))
                         Row(
@@ -136,11 +140,17 @@ fun BottomSheet(
                                 modifier = modifier
                                     .height(75.dp)
                                     .width(75.dp)
-                                    .background(Color.Green, RoundedCornerShape(50)),
+                                    .background(Color.Green, RoundedCornerShape(50))
+                                    .clickable {
+                                               vm.stopOrStart()
+                                    },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.Pause,
+                                    imageVector = if (playOrStop)
+                                        Icons.Default.Pause
+                                    else
+                                        Icons.Default.PlayArrow,
                                     contentDescription = "play-stop-music",
                                     modifier = modifier
                                         .width(50.dp)
