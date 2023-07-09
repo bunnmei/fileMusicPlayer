@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun Folder(img:List<String>?, musics: List<String>?, modifier: Modifier = Modifier, onClick:(String) -> Unit) {
-    if (musics != null) {
+fun Folder(img:String?, music: String?, modifier: Modifier = Modifier,id: Int, onClick:(Int) -> Unit) {
+    if (music != null) {
         val bitmap: Bitmap? =
         if (img != null){
             if (img.isNotEmpty()){
-                 BitmapFactory.decodeFile(img[0])
+                 BitmapFactory.decodeFile(img)
             } else {
                 null
             }
@@ -42,12 +42,11 @@ fun Folder(img:List<String>?, musics: List<String>?, modifier: Modifier = Modifi
         }
 //      mp3のID3を取得するため
         val MMR = MediaMetadataRetriever()
-        musics.forEach {
-            MMR.setDataSource(it)
-            FolderPanel(MMR = MMR, bitmap = bitmap){
-                onClick(it)
-            }
+        MMR.setDataSource(music)
+        FolderPanel(MMR = MMR, bitmap = bitmap){
+            onClick(id)
         }
+
         
     }
 }

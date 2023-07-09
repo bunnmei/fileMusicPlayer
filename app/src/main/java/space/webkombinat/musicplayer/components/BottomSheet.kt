@@ -51,7 +51,8 @@ fun BottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val playOrStop = vm.musicState.value
-    val mp = vm.mp
+    val mp = vm.musicPosi
+    val mpm = vm.musicMax
     if(openBottomSheet.value){
         BoxWithConstraints {
             val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
@@ -85,8 +86,6 @@ fun BottomSheet(
                     modifier = modifier
                         .fillMaxWidth()
                         .fillMaxHeight(),
-//                        .height(screenHeight / 5 * 2),
-//                    verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
@@ -106,14 +105,14 @@ fun BottomSheet(
                         Spacer(modifier = modifier.height(20.dp))
                         Slider(
                             modifier = modifier,
-                            value = mp.value?.currentPosition?.toFloat() ?: 0f,
-                            onValueChange = { sliderValue_ ->
-    //                            viewModel.setFontNow(sliderValue_.toInt())
+                            value = mp.value.toFloat(),
+                            onValueChange = { sliderValue ->
+                               vm.setSlider(sliderValue)
                             },
                             onValueChangeFinished = {
-    //                            viewModel.setFontSize()
+                                vm.setSliderFinish()
                             },
-                            valueRange = if (mp.value != null) {0f..mp.value!!.duration.toFloat()} else {0f..100f}
+                            valueRange = 0f..mpm.value.toFloat()
                         )
                         Spacer(modifier = modifier.height(20.dp))
                         Row(

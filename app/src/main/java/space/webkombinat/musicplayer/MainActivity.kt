@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -85,16 +86,15 @@ class MainActivity : ComponentActivity() {
                     multiplePermissionResultLauncher.launch(permissionsToRequest)
                 }
 
-                var openBottomSheet = rememberSaveable { mutableStateOf(false) }
+                val openBottomSheet = rememberSaveable { mutableStateOf(false) }
 //                val scope = rememberCoroutineScope()
 //                version番号あげないとrememberModalBottomSheetStateは使えない
                 val bottomSheetState = rememberModalBottomSheetState(
                     skipPartiallyExpanded = true
                 )
 
-                val path = Environment.getExternalStorageDirectory().path
-                //特定のフォルダのみを表示する。なければ作るように指示
-                val rootDir = File(path + "/Music/Records").listFiles()
+                val rootDir = vm.rootDir
+                val data = vm.musicAndImageList
                 if (rootDir == null){
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -105,29 +105,15 @@ class MainActivity : ComponentActivity() {
                     }
                 } else {
                     LazyColumn {
-                        items(
-                            items = rootDir,
-                        ){ file ->
-//                          CD or RECORD name ディレクトリ名がジャケット名
-//                            if (file.isDirectory){
-//                                Text(text = file.name)
-//                            }
+                        itemsIndexed(
+                            items = data,
+                        ){ index ,mi ->
 
-//                          mp3を拾い上げる
-                            val musics = file.listFiles()
-                                ?.filter( { it.name.endsWith(".mp3") })
-                                ?.map({it.path})
-
-//                          フォルダ内に画像があればジャケット画像に使う
-                            val img = file.listFiles()
-                                ?.filter( { it.name.endsWith(".jpeg") })
-                                ?.map({it.path})
-                            if (musics != null){
-                                Folder(img = img, musics = musics){ path ->
-                                    vm.setPath(path)
-                                    openBottomSheet.value = true
-                                }
+                            Folder(img = mi.ipath, music = mi.mpaht, id = index){ path ->
+                                vm.setPath(path)
+                                openBottomSheet.value = true
                             }
+
                         }
                     }
 
