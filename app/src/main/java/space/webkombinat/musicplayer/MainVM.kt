@@ -88,6 +88,30 @@ class MainVM: ViewModel(){
         }
     }
 
+    fun nextMusic(){
+        val all = musicAndImageList.size - 1
+        val current = _musicPath.value
+        if (current != null) {
+            if (current < all){
+                setPath(current + 1)
+            } else {
+                setPath(0)
+            }
+        }
+    }
+
+    fun prevMusic() {
+        val all = musicAndImageList.size - 1
+        val current = _musicPath.value
+        if (current != null) {
+            if (current == 0){
+                setPath(all)
+            } else {
+                setPath(current - 1)
+            }
+        }
+    }
+
     fun setSliderFinish(){
         mediaPlayer.value?.seekTo(_musicPosi.value)
     }

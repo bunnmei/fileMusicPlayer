@@ -145,7 +145,11 @@ fun BottomSheet(
                                 modifier = modifier
                                     .height(75.dp)
                                     .width(75.dp)
-                                    .background(Color.Green, RoundedCornerShape(50)),
+                                    .background(Color.Green, RoundedCornerShape(50))
+                                    .clickable {
+                                               vm.prevMusic()
+                                    }
+                                ,
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
@@ -184,6 +188,9 @@ fun BottomSheet(
                                     .height(75.dp)
                                     .width(75.dp)
                                     .background(Color.Green, RoundedCornerShape(50))
+                                    .clickable {
+                                        vm.nextMusic()
+                                    }
                                 ,
                                 contentAlignment = Alignment.Center
                             ) {
