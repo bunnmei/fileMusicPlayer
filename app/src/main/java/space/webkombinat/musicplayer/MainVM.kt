@@ -36,6 +36,9 @@ class MainVM: ViewModel(){
     private var mediaPlayer: MutableState<MediaPlayer?> = mutableStateOf(null)
     val mp = mediaPlayer
 
+    private var _musicMeta:MutableState<MAndI?> = mutableStateOf(null)
+    val musicMeta = _musicMeta
+
     private lateinit var timer: Timer
 
     fun setPath(i: Int){
@@ -45,6 +48,7 @@ class MainVM: ViewModel(){
             timer.cancel()
         }
         _musicPath.value = i
+        _musicMeta.value = musicAndImageList[i]
         playMusic()
     }
     private fun playMusic(){
@@ -68,9 +72,11 @@ class MainVM: ViewModel(){
             _musicState.value = true
         }
     }
+
     fun startMusic(){
         mediaPlayer.value?.start()
     }
+
     fun stopMusic(){
         mediaPlayer.value?.pause()
     }
@@ -94,11 +100,11 @@ class MainVM: ViewModel(){
         val data: MutableList<MAndI> = mutableListOf()
 
         listMap.forEach { file ->
-//                          フォルダ内に画像があればジャケット画像に使う
+//          フォルダ内に画像があればジャケット画像に使う
             val img = file.listFiles()
                 ?.filter( { it.name.endsWith(".jpeg") })
                 ?.map({it.path})
-//                          mp3を拾い上げる
+//          mp3を拾い上げる
             val music = file.listFiles()
                 ?.filter( { it.name.endsWith(".mp3") })
                 ?.map({it.path})
@@ -109,14 +115,14 @@ class MainVM: ViewModel(){
         }
 
         return data
-
     }
 }
 
 data class MAndI (
     val mpaht: String,
     val ipath: String?
-        )
+)
+
 //            _status.value = "内部ストレージ＞Music＞Records　フォルダを作成してください"
 // permissionがないAudio
 // permissionがないMedia

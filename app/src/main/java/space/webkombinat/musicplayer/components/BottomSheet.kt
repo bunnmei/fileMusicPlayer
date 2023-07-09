@@ -1,5 +1,8 @@
 package space.webkombinat.musicplayer.components
 
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,14 +34,18 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import space.webkombinat.musicplayer.MAndI
 import space.webkombinat.musicplayer.MainVM
 
 
@@ -53,6 +60,7 @@ fun BottomSheet(
     val playOrStop = vm.musicState.value
     val mp = vm.musicPosi
     val mpm = vm.musicMax
+    val meta = vm.musicMeta
     if(openBottomSheet.value){
         BoxWithConstraints {
             val screenWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
@@ -76,7 +84,13 @@ fun BottomSheet(
                                 .aspectRatio(1f / 1f)
                                 .background(Color.Green)
                         ){
-
+                             if (meta.value?.ipath != null){
+                                Image(
+                                    bitmap = BitmapFactory.decodeFile(meta.value!!.ipath).asImageBitmap(),
+                                    contentDescription = null,
+                                    modifier = modifier.fillMaxSize()
+                                )
+                             }
                         }
                     }
                 }
@@ -92,16 +106,24 @@ fun BottomSheet(
                         modifier = modifier
                             .width(screenWidth - 100.dp)
                     ) {
-                        Text(
-                            text = "NAME",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 28.sp,
-                        )
-                        Text(
-                            text = "namae",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp,
-                        )
+                        if (meta.value != null){
+                            val mmr = MediaMetadataRetriever()
+                            mmr.setDataSource(meta.value!!.mpaht)
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
+                                Text(
+                                    text = it,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 28.sp,
+                                )
+                            }
+                            mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
+                                Text(
+                                    text = it,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 22.sp,
+                                )
+                            }
+                        }
                         Spacer(modifier = modifier.height(20.dp))
                         Slider(
                             modifier = modifier,
@@ -141,7 +163,7 @@ fun BottomSheet(
                                     .width(75.dp)
                                     .background(Color.Green, RoundedCornerShape(50))
                                     .clickable {
-                                               vm.stopOrStart()
+                                        vm.stopOrStart()
                                     },
                                 contentAlignment = Alignment.Center
                             ) {
