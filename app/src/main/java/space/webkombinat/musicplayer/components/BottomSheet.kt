@@ -57,7 +57,7 @@ fun BottomSheet(
     vm: MainVM,
     modifier: Modifier = Modifier,
 ) {
-    val playOrStop = vm.musicState.value
+    val playOrStop = vm.musicIsPlay.value
     val mp = vm.musicPosi
     val mpm = vm.musicMax
     val meta = vm.musicMeta

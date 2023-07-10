@@ -1,6 +1,7 @@
 package space.webkombinat.musicplayer
 
 import android.Manifest
+import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -10,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,12 +35,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import space.webkombinat.musicplayer.components.BottomSheet
 import space.webkombinat.musicplayer.components.Folder
+import space.webkombinat.musicplayer.components.Snackbar
 import space.webkombinat.musicplayer.ui.theme.MusicPlayerTheme
 import java.io.File
 
 // Permissionは↓を参考
 // https://github.com/philipplackner/PermissionsGuideCompose/blob/master/app/src/main/java/com/plcoding/permissionsguidecompose/MainActivity.kt
-
 
 class MainActivity : ComponentActivity() {
 
@@ -68,6 +70,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MusicPlayerTheme {
                 val vm = viewModel<MainVM>()
+                val meta = vm.musicMeta
 
                 val multiplePermissionResultLauncher =
                     rememberLauncherForActivityResult(
@@ -87,8 +90,8 @@ class MainActivity : ComponentActivity() {
                 }
 
                 val openBottomSheet = rememberSaveable { mutableStateOf(false) }
-//                val scope = rememberCoroutineScope()
-//                version番号あげないとrememberModalBottomSheetStateは使えない
+//              val scope = rememberCoroutineScope()
+//              version番号あげないとrememberModalBottomSheetStateは使えない
                 val bottomSheetState = rememberModalBottomSheetState(
                     skipPartiallyExpanded = true
                 )
@@ -104,16 +107,37 @@ class MainActivity : ComponentActivity() {
                         Text(text = "内部ストレージ＞Music＞Records \n フォルダを作成してください")
                     }
                 } else {
-                    LazyColumn {
-                        itemsIndexed(
-                            items = data,
-                        ){ index ,mi ->
-
-                            Folder(img = mi.ipath, music = mi.mpaht, id = index){ path ->
-                                vm.setPath(path)
-                                openBottomSheet.value = true
+                    Box(modifier = Modifier.fillMaxSize()){
+                        LazyColumn {
+                            itemsIndexed(
+                                items = data,
+                            ){ index ,mi ->
+    
+                                Folder(img = mi.ipath, music = mi.mpaht, id = index){ path ->
+                                    vm.setPath(path)
+                                    openBottomSheet.value = true
+                                }
+    
                             }
-
+                        }
+                        
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            val mmr = MediaMetadataRetriever()
+                            if (meta.value != null){
+                                mmr.setDataSource(meta.value!!.mpaht)
+                            }
+                            Snackbar(
+                                snackState = vm.musicState,
+                                text = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+                                onClose = {
+                                    vm.closeMusic()
+                                },
+                                onOpen = {
+                                    openBottomSheet.value = true
+                                })
                         }
                     }
 

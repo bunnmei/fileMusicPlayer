@@ -24,6 +24,9 @@ class MainVM: ViewModel(){
     private var _musicState = mutableStateOf(false)
     val musicState = _musicState
 
+    private var _musicIsPlay = mutableStateOf(false)
+    val musicIsPlay = _musicIsPlay
+
     private var _musicMax = mutableStateOf(0)
     val musicMax = _musicMax
 
@@ -41,11 +44,14 @@ class MainVM: ViewModel(){
 
     private lateinit var timer: Timer
 
+    private var _snackBar = mutableStateOf(true)
+    val snackBar = _snackBar
+
     fun setPath(i: Int){
         if (mediaPlayer.value != null){
+            timer.cancel()
             mediaPlayer.value!!.release()
             mediaPlayer.value = null
-            timer.cancel()
         }
         _musicPath.value = i
         _musicMeta.value = musicAndImageList[i]
@@ -61,18 +67,28 @@ class MainVM: ViewModel(){
             mp.start()
         }
         timerGetPosi()
-        musicState.value = true
+        _musicState.value = true
+        _musicIsPlay.value = true
     }
     fun stopOrStart(){
-        if (_musicState.value){
+        if (_musicIsPlay.value){
             stopMusic()
-            _musicState.value = false
+            _musicIsPlay.value = false
         } else {
             startMusic()
-            _musicState.value = true
+            _musicIsPlay.value = true
         }
     }
 
+    fun closeMusic(){
+        if (mediaPlayer.value != null){
+            timer.cancel()
+            mediaPlayer.value!!.release()
+            mediaPlayer.value = null
+        }
+        _musicIsPlay.value = false
+        _musicState.value = false
+    }
     fun startMusic(){
         mediaPlayer.value?.start()
     }
@@ -83,8 +99,8 @@ class MainVM: ViewModel(){
 
     fun timerGetPosi() {
         timer = fixedRateTimer(period = 1000L){
-            _musicPosi.value = mediaPlayer.value?.currentPosition!!
-            Log.i("Data", "${mediaPlayer.value?.currentPosition!!}")
+            _musicPosi.value = mediaPlayer.value?.currentPosition ?: 0
+            Log.i("Data", "${mediaPlayer.value?.currentPosition ?: 0}")
         }
     }
 
@@ -147,7 +163,7 @@ data class MAndI (
     val ipath: String?
 )
 
-//            _status.value = "内部ストレージ＞Music＞Records　フォルダを作成してください"
+// _status.value = "内部ストレージ＞Music＞Records　フォルダを作成してください"
 // permissionがないAudio
 // permissionがないMedia
 // RecordsFolderがないがない
