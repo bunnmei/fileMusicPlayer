@@ -44,8 +44,7 @@ class MainVM: ViewModel(){
 
     private lateinit var timer: Timer
 
-    private var _snackBar = mutableStateOf(true)
-    val snackBar = _snackBar
+    private var _nextInt = mutableStateOf(0)
 
     fun setPath(i: Int){
         if (mediaPlayer.value != null){
@@ -91,16 +90,35 @@ class MainVM: ViewModel(){
     }
     fun startMusic(){
         mediaPlayer.value?.start()
+        timerGetPosi()
     }
 
     fun stopMusic(){
         mediaPlayer.value?.pause()
+        timer.cancel()
     }
 
     fun timerGetPosi() {
         timer = fixedRateTimer(period = 1000L){
             _musicPosi.value = mediaPlayer.value?.currentPosition ?: 0
-            Log.i("Data", "${mediaPlayer.value?.currentPosition ?: 0}")
+            val dur = mediaPlayer.value?.duration
+            val cur = mediaPlayer.value?.currentPosition
+
+            Log.i("DATA", "${dur} duration")
+            Log.i("DATA", "${cur} current")
+            if (dur != null && cur != null && cur != 0 && dur != 0){
+                val rangeS = dur / 1000 - 1
+                val rangeE = dur / 1000 + 1
+                if (cur / 1000 in rangeS..rangeE){
+                    _nextInt.value += 1
+                    if (_nextInt.value <= 2){
+                        timer.cancel()
+                        _nextInt.value = 0
+                        nextMusic()
+                    }
+                }
+            }
+
         }
     }
 
