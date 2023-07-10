@@ -64,7 +64,7 @@ fun Snackbar(
                 contentAlignment = Alignment.Center
             ){
                 Text(
-                    text = text ?: "????",
+                    text = text?.substring(2) ?: "????",
                     fontSize = 24.sp,
                     softWrap = true,
                     overflow = TextOverflow.Ellipsis

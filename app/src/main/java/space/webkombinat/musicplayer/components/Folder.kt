@@ -46,8 +46,6 @@ fun Folder(img:String?, music: String?, modifier: Modifier = Modifier,id: Int, o
         FolderPanel(MMR = MMR, bitmap = bitmap){
             onClick(id)
         }
-
-        
     }
 }
 
@@ -84,7 +82,7 @@ fun FolderPanel(MMR: MediaMetadataRetriever, bitmap: Bitmap?, modifier: Modifier
                 .padding(start = 10.dp)
         ) {
             Text(
-                text = MMR.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: "?",
+                text = MMR.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)?.substring(2) ?: "?",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
                 maxLines = 2

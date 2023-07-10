@@ -15,9 +15,9 @@ import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
 
 class MainVM: ViewModel(){
-    val path = Environment.getExternalStorageDirectory().path
+    private val path: String? = Environment.getExternalStorageDirectory().path
     //特定のフォルダのみを表示する。なければ作るように指示
-    val rootDir = File(path + "/Music/Records").listFiles()
+    val rootDir: Array<File>? = File("$path/Music/Records").listFiles()
 
     val musicAndImageList = makeList(rootDir)
 
@@ -103,9 +103,9 @@ class MainVM: ViewModel(){
             _musicPosi.value = mediaPlayer.value?.currentPosition ?: 0
             val dur = mediaPlayer.value?.duration
             val cur = mediaPlayer.value?.currentPosition
-
-            Log.i("DATA", "${dur} duration")
-            Log.i("DATA", "${cur} current")
+//            Log.i("DATA", "$dur duration")
+//            Log.i("DATA", "$cur current")
+//          曲が終わったら次の曲に行く処理
             if (dur != null && cur != null && cur != 0 && dur != 0){
                 val rangeS = dur / 1000 - 1
                 val rangeE = dur / 1000 + 1
@@ -154,21 +154,26 @@ class MainVM: ViewModel(){
         _musicPosi.value = changeVal.toInt()
     }
 
-    fun makeList(listMap: Array<File>) : MutableList<MAndI> {
+    fun makeList(listMap: Array<File>?) : MutableList<MAndI> {
         val data: MutableList<MAndI> = mutableListOf()
 
-        listMap.forEach { file ->
+        listMap?.forEach { file ->
+
 //          フォルダ内に画像があればジャケット画像に使う
             val img = file.listFiles()
-                ?.filter( { it.name.endsWith(".jpeg") })
-                ?.map({it.path})
+                ?.filter { it.name.endsWith(".jpg") }
+                ?.map { it.path }
+
 //          mp3を拾い上げる
             val music = file.listFiles()
-                ?.filter( { it.name.endsWith(".mp3") })
-                ?.map({it.path})
+                ?.filter { it.name.endsWith(".mp3") }
+                ?.sortedBy { it.name.substring(0, 2).toInt() }
+                ?.map { it ->
+                    it.path
+                }
 
-            music?.forEach { paht ->
-                data.add(MAndI(mpaht = paht, ipath = img?.get(0)))
+            music?.forEach { path ->
+                data.add(MAndI(mpaht = path, ipath = img?.get(0)))
             }
         }
 

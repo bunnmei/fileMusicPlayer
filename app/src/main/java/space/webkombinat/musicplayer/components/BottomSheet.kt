@@ -111,7 +111,7 @@ fun BottomSheet(
                             mmr.setDataSource(meta.value!!.mpaht)
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)?.let {
                                 Text(
-                                    text = it,
+                                    text = it.substring(2),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 28.sp,
                                 )
