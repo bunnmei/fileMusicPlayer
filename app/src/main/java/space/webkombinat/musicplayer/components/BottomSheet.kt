@@ -29,9 +29,12 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -114,6 +117,7 @@ fun BottomSheet(
                                     text = it.substring(2),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 28.sp,
+                                    style = LocalTextStyle.current.copy(lineHeight = 34.sp)
                                 )
                             }
                             mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)?.let {
@@ -134,7 +138,11 @@ fun BottomSheet(
                             onValueChangeFinished = {
                                 vm.setSliderFinish()
                             },
-                            valueRange = 0f..mpm.value.toFloat()
+                            valueRange = 0f..mpm.value.toFloat(),
+                            colors = SliderDefaults.colors(
+                                activeTickColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                inactiveTrackColor = MaterialTheme.colorScheme.primaryContainer
+                            )
                         )
                         Spacer(modifier = modifier.height(20.dp))
                         Row(
@@ -145,9 +153,12 @@ fun BottomSheet(
                                 modifier = modifier
                                     .height(75.dp)
                                     .width(75.dp)
-                                    .background(Color.Green, RoundedCornerShape(50))
+                                    .background(
+                                        MaterialTheme.colorScheme.primaryContainer,
+                                        RoundedCornerShape(50)
+                                    )
                                     .clickable {
-                                               vm.prevMusic()
+                                        vm.prevMusic()
                                     }
                                 ,
                                 contentAlignment = Alignment.Center
@@ -165,7 +176,10 @@ fun BottomSheet(
                                 modifier = modifier
                                     .height(75.dp)
                                     .width(75.dp)
-                                    .background(Color.Green, RoundedCornerShape(50))
+                                    .background(
+                                        MaterialTheme.colorScheme.primaryContainer,
+                                        RoundedCornerShape(50)
+                                    )
                                     .clickable {
                                         vm.stopOrStart()
                                     },
@@ -187,7 +201,10 @@ fun BottomSheet(
                                 modifier = modifier
                                     .height(75.dp)
                                     .width(75.dp)
-                                    .background(Color.Green, RoundedCornerShape(50))
+                                    .background(
+                                        MaterialTheme.colorScheme.primaryContainer,
+                                        RoundedCornerShape(50)
+                                    )
                                     .clickable {
                                         vm.nextMusic()
                                     }

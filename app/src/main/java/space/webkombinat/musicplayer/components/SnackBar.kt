@@ -68,7 +68,8 @@ fun Snackbar(
                     text = text?.substring(2) ?: "????",
                     fontSize = 24.sp,
                     softWrap = true,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
             Box(
