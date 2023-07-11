@@ -157,7 +157,9 @@ class MainVM: ViewModel(){
     fun makeList(listMap: Array<File>?) : MutableList<MAndI> {
         val data: MutableList<MAndI> = mutableListOf()
 
-        listMap?.forEach { file ->
+        listMap
+            ?.sortedBy { it.name.substring(0, 2).toInt() }
+            ?.forEach { file ->
 
 //          フォルダ内に画像があればジャケット画像に使う
             val img = file.listFiles()
