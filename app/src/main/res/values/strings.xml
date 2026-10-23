@@ -1,3 +1,81 @@
 <resources>
-    <string name="app_name">musicPlayer</string>
+    <string name="app_name">Music Player</string>
+
+    <!-- 権限 -->
+    <string name="permission_title">音楽ファイルへのアクセス</string>
+    <string name="permission_body">端末内の曲を一覧に表示するため、音楽（とジャケット画像）の読み取りを許可してください。</string>
+    <string name="permission_grant">許可する</string>
+    <string name="permission_open_settings">設定を開く</string>
+    <string name="permission_denied_body">権限が拒否されています。設定アプリの「権限」から音楽へのアクセスを許可してください。</string>
+
+    <!-- ライブラリ -->
+    <string name="library">ライブラリ</string>
+    <string name="tab_albums">アルバム</string>
+    <string name="tab_songs">曲</string>
+    <string name="tab_artists">アーティスト</string>
+    <string name="search">検索</string>
+    <string name="search_hint">曲・アルバム・アーティストを検索</string>
+    <string name="close_search">検索を閉じる</string>
+    <string name="settings">設定</string>
+    <string name="back">戻る</string>
+    <string name="empty_library_title">曲が見つかりません</string>
+    <string name="empty_library_body">端末の「Music」フォルダなどに音楽ファイルを入れてください。コピーした直後は設定の「ライブラリを再スキャン」を試してください。</string>
+    <string name="no_results">一致する項目はありません</string>
+    <string name="unknown_artist">不明なアーティスト</string>
+    <string name="play_all">再生</string>
+    <string name="shuffle">シャッフル</string>
+    <string name="shuffle_all">すべてシャッフル</string>
+    <plurals name="song_count">
+        <item quantity="other">%d 曲</item>
+    </plurals>
+    <plurals name="album_count">
+        <item quantity="other">%d 枚のアルバム</item>
+    </plurals>
+    <string name="minutes">%d 分</string>
+
+    <!-- プレイヤー -->
+    <string name="now_playing">再生中</string>
+    <string name="close_player">プレイヤーを閉じる</string>
+    <string name="play">再生</string>
+    <string name="pause">一時停止</string>
+    <string name="next">次の曲</string>
+    <string name="previous">前の曲</string>
+    <string name="repeat_off">リピートなし</string>
+    <string name="repeat_all">全曲リピート</string>
+    <string name="repeat_one">1 曲リピート</string>
+    <string name="queue">再生キュー</string>
+    <string name="playing_indicator">再生中の曲</string>
+
+    <!-- 設定 -->
+    <string name="section_appearance">外観</string>
+    <string name="theme">テーマ</string>
+    <string name="theme_system">システム</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="dynamic_color">ダイナミックカラー</string>
+    <string name="dynamic_color_desc">壁紙の色をアプリの配色に使います</string>
+    <string name="section_sound">サウンド</string>
+    <string name="volume">アプリ内の音量</string>
+    <string name="volume_desc">端末の音量とは別に、このアプリの音量を調整します</string>
+    <string name="equalizer">イコライザー</string>
+    <string name="equalizer_desc">周波数ごとに音の強さを調整します</string>
+    <string name="equalizer_unsupported">この端末はイコライザーに対応していません</string>
+    <string name="preset_custom">カスタム</string>
+    <string name="reset">リセット</string>
+    <string name="advanced_effects">低音・立体音響</string>
+    <string name="bass_boost">低音ブースト</string>
+    <string name="virtualizer">バーチャライザー（立体音響）</string>
+    <string name="section_library">ライブラリ</string>
+    <string name="rescan">ライブラリを再スキャン</string>
+    <string name="rescan_desc">曲が表示されないときに Music フォルダを読み直します</string>
+    <string name="rescanning">スキャン中…</string>
+    <string name="rescan_done">%d 個のファイルをスキャンしました</string>
+    <string name="folders">表示するフォルダ</string>
+    <string name="folders_all_shown">すべてのフォルダを表示しています</string>
+    <string name="folders_excluded_count">%d 個のフォルダを非表示にしています</string>
+    <string name="folders_description">チェックを外したフォルダ（とその中のフォルダ）の曲は、ライブラリに表示されません。ファイルは削除されません。</string>
+    <string name="folders_empty">曲が入っているフォルダはありません</string>
+    <string name="library_stats">%1$d 曲 · %2$d アルバム · %3$d アーティスト</string>
+    <string name="section_about">このアプリについて</string>
+    <string name="version">バージョン</string>
 </resources>
